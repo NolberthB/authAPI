@@ -1,4 +1,7 @@
+import bcrypt from 'bcrypt'
+
 import User from '../models/userModel.js'
+import { SALT_ROUNDS } from '../configs/env.js'
 
 export class authService {
   static async register ({ username, password, role }) {
@@ -13,10 +16,13 @@ export class authService {
     const user = await User.findOne({ username })
     if (user) throw new Error('username already exists')
 
+    // hashed password
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+
     // Crear un nuevo usuario
     const newUser = new User({
       username,
-      password,
+      password: hashedPassword,
       role
     })
 
