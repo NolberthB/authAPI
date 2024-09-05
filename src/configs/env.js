@@ -1,5 +1,6 @@
 export const {
   PORT = 3001,
   MONGO_URI,
-  SALT_ROUNDS = 10
+  SALT_ROUNDS,
+  SECRET_JWT_KEY
 } = process.env
