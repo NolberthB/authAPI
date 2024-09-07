@@ -1,4 +1,5 @@
 export const {
+  NODE_ENV = 'production',
   PORT = 3001,
   MONGO_URI,
   SALT_ROUNDS,
