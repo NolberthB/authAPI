@@ -1,4 +1,4 @@
-import { NODE_ENV } from '../configs/env.js'
+import { envs } from '../configs/env.js'
 
 // Middleware para manejo de erores
 const errorHandler = (err, req, res, next) => {
@@ -6,7 +6,7 @@ const errorHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || 500
   const message = err.message || 'Internal Server Error'
 
-  if (NODE_ENV === 'development') {
+  if (envs.NODE_ENV === 'development') {
     console.error(err.stack) // Mostrar stack trace en la consola
     return res.status(statusCode).json({
       error: message,

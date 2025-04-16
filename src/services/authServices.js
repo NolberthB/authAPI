@@ -1,31 +1,37 @@
 import bcrypt from 'bcrypt'
 
-import User from '../models/userModel.js'
-import { SALT_ROUNDS } from '../configs/env.js'
+import { User } from '../models/postgres/userModel.js'
+import { envs } from '../configs/env.js'
 
 export class authService {
   static async register ({ username, password, role }) {
     // Validaciones (opcional: validar con zod)
+    // Validar que el username y password cumpla con los requerimientos
     Validaciones.username(username)
     Validaciones.password(password)
 
-    // Verificar que el usuario no exista
-    const user = await User.findOne({ username })
-    if (user) throw new Error('username already exists')
+    // Validar que el usuario no exista
+    const user = await User.findOne({ where: { username } })
+    if (user) throw new Error('Username already exists')
+
+    // const user = await User.findOne({ username })
+    // if (user) throw new Error('username already exists')
 
     // hashed password
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+    const hashedPassword = await bcrypt.hash(password, envs.SALT_ROUNDS)
 
-    // Crear un nuevo usuario
-    const newUser = new User({
+    // Crear el usuario directamente con Sequelize
+    const newUser = await User.create({
       username,
       password: hashedPassword,
       role
     })
 
-    // Guardar el usuario en la base de datos
-    const savedUser = await newUser.save()
-    return savedUser._id
+    // Guardar el usuario en la base de datos con Mongoose
+    // const savedUser = await newUser.save()
+
+    // Devolver el ID
+    return newUser.id
   }
 
   static async login ({ username, password, role }) {
@@ -33,15 +39,24 @@ export class authService {
     Validaciones.username(username)
     Validaciones.password(password)
 
-    const user = await User.findOne({ username }).lean() // lean(): devuelve un objeto js plano en lugar de un doc Mongoose
-    if (!user) throw new Error('username does not exist')
+    // Validar que el usuario existe con Sequelize
+    const user = await User.findOne({ where: { username } }) // <- Enstancia del modelo de Sequelize
+    if (!user) throw new Error('Username does not exist')
+
+    // Mongoose
+    // const user = await User.findOne({ username }).lean() // lean(): devuelve un objeto js plano en lugar de un doc Mongoose
+    // if (!user) throw new Error('username does not exist')
 
     const isValid = await bcrypt.compare(password, user.password)
     if (!isValid) throw new Error('password is invalid')
 
-    const { password: _, ...publicUser } = user
+    // Convertir el objeto de Sequelize a un objeto plano
+    const userPlain = user.get({ plain: true })
 
-    return publicUser
+    // Sacar el password del objeto y asignarlo a un nuevo objeto
+    const { password: _, ...publicUser } = userPlain
+
+    return publicUser // <- Devolver el usuario sin el password
   }
 }
 
