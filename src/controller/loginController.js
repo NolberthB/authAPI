@@ -3,7 +3,7 @@ import { envs } from '../configs/env.js'
 
 import { authService } from '../services/authServices.js'
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   const { username, password, role } = req.body
 
   try {
@@ -24,7 +24,7 @@ export const login = async (req, res) => {
       })
       .send({ user })
   } catch (error) {
-    // TODO: Manejar errores
-    res.status(400).send(error.message)
+    // Delegar errores al middleware
+    next(error)
   }
 }

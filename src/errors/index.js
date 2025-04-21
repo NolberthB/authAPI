@@ -9,6 +9,13 @@ const createErrorFactory = function (name, defaultStatusCode = 500) {
   }
 }
 
-export const InternalServerError = createErrorFactory('InternalServerError', 500)
-export const ConnectionError = createErrorFactory('ConnectionError', 503)
-export const ValidationError = createErrorFactory('ValidationError', 400)
+export const Errors = {
+  ValidationError: createErrorFactory('ValidationError', 400),
+  InvalidCredentialsError: createErrorFactory('InvalidCredentialsError', 401),
+  UserNotFoundError: createErrorFactory('UserNotFoundError', 404),
+  BusinessError: createErrorFactory('BusinessError', 409),
+  DatabaseError: createErrorFactory('DatabaseError', 500),
+  TokenGenerationError: createErrorFactory('TokenGenerationError', 500),
+  InternalServerError: createErrorFactory('InternalServerError', 500),
+  ConnectionError: createErrorFactory('ConnectionError', 503)
+}

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
-import { envs } from '../configs/env.js'
+import { envs } from '../env.js'
 
-import { ConnectionError } from '../errors/index.js'
+import { ConnectionError } from '../../errors/index.js'
 
 const connectDB = async () => {
   try {

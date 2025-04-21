@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize'
-import { sequelize } from '../../db/postgresDB.js'
+import { sequelize } from '../../configs/db/postgresDB.js'
 
 // Define the User model
 // This model represents the users table in the database

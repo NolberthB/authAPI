@@ -1,7 +1,10 @@
 import Joi from 'joi'
+import { Errors } from '../errors/index.js'
+import { logStartupError } from '../utils/logStartupError.js'
 
 // Define el schema para validar las variables de entorno
 const envSchema = Joi.object({
+  NODE_ENV: Joi.string().required(),
   PORT: Joi.number().required().port().default(3000),
   MONGO_URI: Joi.string().required(),
   POSTGRES_URI: Joi.string().required(),
@@ -17,11 +20,18 @@ const { value, error } = envSchema.validate(process.env, {
   // opcion global
 })
 
-// TODO: MANEJAR EL ERROR DE VALIDACION CON EL MIDDLEWARE DE ERROR
-if (error) throw new Error(`Config validation error: ${error.message}`)
+// Manejo de errores de validación
+if (error) {
+  // Crear el error personalizado y pasarle el mensaje original de Joi
+  const validationError = new Errors.ValidationError(
+    `Error al cargar las variables de entorno:\n ${error.details.map(e => `- ${e.message}`).join('\n')}`
+  )
+  logStartupError(validationError, value.NODE_ENV)
+  process.exit(1) // Termina el proceso si no se puede validar el .env
+}
 
 export const envs = {
-  NODE_ENV: 'production',
+  NODE_ENV: value.NODE_ENV,
   PORT: value.PORT,
   MONGO_URI: value.MONGO_URI,
   SALT_ROUNDS: value.SALT_ROUNDS,
