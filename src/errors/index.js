@@ -11,7 +11,9 @@ const createErrorFactory = function (name, defaultStatusCode = 500) {
 
 export const Errors = {
   ValidationError: createErrorFactory('ValidationError', 400),
+  UnauthorizedError: createErrorFactory('UnauthorizedError, 401'),
   InvalidCredentialsError: createErrorFactory('InvalidCredentialsError', 401),
+  ForbiddenError: createErrorFactory('ForbiddenError', 403),
   UserNotFoundError: createErrorFactory('UserNotFoundError', 404),
   BusinessError: createErrorFactory('BusinessError', 409),
   DatabaseError: createErrorFactory('DatabaseError', 500),

@@ -5,6 +5,7 @@ import { AuthValidation } from '../validations/auth.validation.js'
 import { User } from '../models/postgres/userModel.js'
 import { envs } from '../configs/env.js'
 
+// TODO: ASIGNAR UN ROLE POR DEFECTO
 export class authService {
   static async register ({ username, password, role }) {
     // Validar que el username y password cumpla con los requerimientos
@@ -41,10 +42,10 @@ export class authService {
     return newUser.id
   }
 
-  static async login ({ username, password, role }) {
+  static async login ({ username, password }) {
     // Validar que username,password y role esten correctos
     const { error } = AuthValidation.loginSchema.validate(
-      { username, password, role },
+      { username, password },
       { abortEarly: false }
     )
     if (error) {
@@ -59,6 +60,7 @@ export class authService {
     // const user = await User.findOne({ username }).lean() // lean(): devuelve un objeto js plano en lugar de un doc Mongoose
     // if (!user) throw new Error('username does not exist')
 
+    // Validar que la contraseña sea la correcta
     const isValid = await bcrypt.compare(password, user.password)
     if (!isValid) throw new Errors.InvalidCredentialsError('Password is invalid')
 

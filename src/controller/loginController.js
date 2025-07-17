@@ -4,10 +4,10 @@ import { envs } from '../configs/env.js'
 import { authService } from '../services/authServices.js'
 
 export const login = async (req, res, next) => {
-  const { username, password, role } = req.body
+  const { username, password } = req.body
 
   try {
-    const user = await authService.login({ username, password, role })
+    const user = await authService.login({ username, password })
     const token = jwt.sign(
       { id: user._id, username: user.username, role: user.role },
       envs.SECRET_JWT_KEY,

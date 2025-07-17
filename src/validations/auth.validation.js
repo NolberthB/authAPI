@@ -30,10 +30,6 @@ export class AuthValidation {
       'string.base': 'Password must be a string',
       'string.empty': 'Password is required',
       'any.required': 'Password is required'
-    }),
-    role: Joi.string().valid('admin', 'user').required().messages({
-      'any.only': 'Role must be admin or user',
-      'any.required': 'Role is required'
     })
   })
 }
