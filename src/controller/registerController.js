@@ -1,10 +1,10 @@
 import { authService } from '../services/authServices.js'
 
 export const register = async (req, res, next) => {
-  const { username, password, role } = req.body
+  const { username, password } = req.body
 
   try {
-    const id = await authService.register({ username, password, role })
+    const id = await authService.register({ username, password })
     console.log(id)
     res.send({ id })
   } catch (error) {

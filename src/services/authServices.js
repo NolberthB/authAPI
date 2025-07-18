@@ -1,16 +1,17 @@
 import bcrypt from 'bcrypt'
 import { Errors } from '../errors/index.js'
 import { AuthValidation } from '../validations/auth.validation.js'
+import { ROLES } from '../utils/roles.js'
 
 import { User } from '../models/postgres/userModel.js'
 import { envs } from '../configs/env.js'
 
 // TODO: ASIGNAR UN ROLE POR DEFECTO
 export class authService {
-  static async register ({ username, password, role }) {
+  static async register ({ username, password }) {
     // Validar que el username y password cumpla con los requerimientos
     const { error } = AuthValidation.registerSchema.validate(
-      { username, password, role },
+      { username, password },
       { abortEarly: false }
     )
 
@@ -32,7 +33,7 @@ export class authService {
     const newUser = await User.create({
       username,
       password: hashedPassword,
-      role
+      role: ROLES.CUSTOMER // <- Role por defecto
     })
 
     // Guardar el usuario en la base de datos con Mongoose

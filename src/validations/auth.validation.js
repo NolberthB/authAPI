@@ -14,10 +14,10 @@ export class AuthValidation {
       'string.min': 'Password must be at least 6 characters long',
       'any.required': 'Password is required'
     }),
-    role: Joi.string().valid('admin', 'user').required().messages({
+    role: Joi.string().valid('admin', 'customer').required().messages({
       'any.only': 'Role must be admin or user',
       'any.required': 'Role is required'
-    })
+    }).optional()
   })
 
   static loginSchema = Joi.object({
