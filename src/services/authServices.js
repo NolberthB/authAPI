@@ -6,7 +6,6 @@ import { ROLES } from '../utils/roles.js'
 import { User } from '../models/postgres/userModel.js'
 import { envs } from '../configs/env.js'
 
-// TODO: ASIGNAR UN ROLE POR DEFECTO
 export class authService {
   static async register ({ username, password }) {
     // Validar que el username y password cumpla con los requerimientos
