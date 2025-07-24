@@ -5,8 +5,10 @@ export const register = async (req, res, next) => {
 
   try {
     const id = await authService.register({ username, password })
-    console.log(id)
-    res.send({ id })
+    res.status(201).json({
+      message: 'User registered successfully',
+      userId: id
+    })
   } catch (error) {
     // Delegar errores al middleware
     next(error)

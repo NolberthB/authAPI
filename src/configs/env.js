@@ -1,6 +1,11 @@
+import dotenv from 'dotenv'
 import Joi from 'joi'
 import { Errors } from '../errors/index.js'
 import { logStartupError } from '../utils/logStartupError.js'
+
+// Cargar archivo de entorno segun el NODE_ENV
+const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
+dotenv.config({ path: envFile })
 
 // Define el schema para validar las variables de entorno
 const envSchema = Joi.object({

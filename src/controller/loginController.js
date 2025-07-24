@@ -16,7 +16,7 @@ export const login = async (req, res, next) => {
       })
 
     res
-      .cookie('access_token', token, {
+      .cookie('token', token, {
         httpOnly: true, // la cookie solo se puede acceder en el servidor
         secure: process.env.NODE_ENV === 'production', // la cookie solo se puede acceder en https
         sameSite: 'strict', // la cookie solo se puede acceder en el mismo dominio

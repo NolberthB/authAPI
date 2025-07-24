@@ -3,14 +3,15 @@
   "module": "index.js",
   "type": "module",
   "scripts": {
+    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/.bin/jest",
     "dev": "node --watch src/index.js"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "standard": "17.1.0"
-  },
-  "peerDependencies": {
-    "typescript": "5.0.0"
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "standard": "17.1.0",
+    "supertest": "^7.1.4"
   },
   "dependencies": {
     "bcrypt": "5.1.1",

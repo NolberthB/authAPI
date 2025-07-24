@@ -11,8 +11,8 @@ const errorHandler = (err, req, res, next) => {
   if (envs.NODE_ENV === 'development') {
     console.error(err.stack) // Mostrar stack trace en la consola
     return res.status(statusCode).json({
-      error: message,
-      stack: err.stack // Incluir stack trace en la respuesta en desarrollo
+      message, // en vez de "error: message"
+      stack: err.stack
     })
   }
   // En producción: mostrar mensaje genérico si el error no es conocido
@@ -20,7 +20,7 @@ const errorHandler = (err, req, res, next) => {
   const isKnownError = knownErrorsNames.includes(err.name)
 
   res.status(statusCode).json({
-    error: isKnownError ? err.message : 'Ocurrió un error inesperado. Inténtalo más tarde.',
+    message: isKnownError ? err.message : 'Ocurrió un error inesperado. Inténtalo más tarde.',
     stack: '' // No incluir stack trace en producción
   })
 }
