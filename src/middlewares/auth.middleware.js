@@ -3,7 +3,7 @@ import { envs } from '../configs/env.js'
 import { Errors } from '../errors/index.js'
 
 // Middleware para verificar token JWT
-export const protect = (req, res, next) => {
+export const authenticateUser = (req, res, next) => {
   const token = req.cookies.token // Se obtiene el token de la cookie
 
   // Valida si el token existe

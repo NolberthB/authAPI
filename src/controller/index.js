@@ -1,12 +1,12 @@
 // controllers/index.js
 import { register } from './registerController.js'
 import { login } from './loginController.js'
-import { getAll } from './userController.js'
+import { getProfile } from './profileController.js'
 
 const controllers = {
   register,
   login,
-  getAll
+  getProfile
 }
 
 export default controllers

@@ -1,19 +1,13 @@
-import Errors from '../utils/errors.js'
+import { Errors } from '../errors/index.js'
 
-export const authRole = (...allowedRoles) => {
+export const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
-    // Verifica si el usuario tiene un rol
-    if (!req.user || !req.user.role) {
-      throw new Errors.ForbiddenError('Role not found')
+    const { user } = req
+
+    if (!user || !allowedRoles.includes(user.role)) {
+      throw new Errors.ForbiddenError('No tienes permiso para acceder a esta ruta')
     }
 
-    // Validar si el rol del usuario está permitido
-    if (!allowedRoles.includes(req.user.role)) {
-      // Si no está permitido, se lanza un error
-      throw new Errors.ForbiddenError('You do not have access')
-    }
-
-    // Si el rol esta permitido, dejamos continuar
     next()
   }
 }
