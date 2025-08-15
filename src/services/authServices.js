@@ -5,6 +5,7 @@ import { ROLES } from '../utils/roles.js'
 
 import { User } from '../models/postgres/userModel.js'
 import { envs } from '../configs/env.js'
+import { findUserByUsername } from '../utils/findUser.js'
 
 export class authService {
   static async register ({ username, password }) {
@@ -19,7 +20,7 @@ export class authService {
     }
 
     // Validar que el usuario no exista
-    const user = await User.findOne({ where: { username } })
+    const user = findUserByUsername(username)
     if (user) throw new Errors.BusinessError('Username already exists')
 
     // const user = await User.findOne({ username })
@@ -53,7 +54,7 @@ export class authService {
     }
 
     // Validar que el usuario existe con Sequelize
-    const user = await User.findOne({ where: { username } }) // <- Enstancia del modelo de Sequelize
+    const user = await findUserByUsername(username) // <- Enstancia del modelo de Sequelize
     if (!user) throw new Errors.UserNotFoundError('Username does not exist')
 
     // Mongoose
@@ -72,16 +73,18 @@ export class authService {
 
     return publicUser // <- Devolver el usuario sin el password
   }
+
+  static async getProfile (username) {
+    // Validar que el usuario existe con Sequelize
+    const user = await findUserByUsername(username)
+    if (!user) throw new Errors.UserNotFoundError('Username does not exist')
+
+    // Convertir el objeto de Sequelize a un objeto plano
+    const userPlain = user.get({ plain: true })
+
+    // Sacar el password del objeto y asignarlo a un nuevo objeto
+    const { password: _, ...publicUser } = userPlain
+
+    return publicUser // <- Devolver el usuario sin el password
+  }
 }
-
-// class Validaciones {
-//   static username (username) {
-//     if (typeof username !== 'string') { throw new Error('username must be a string') }
-//     if (username.length < 3) { throw new Error('usrname must be at least 3 characters long') }
-//   }
-
-//   static password (password) {
-//     if (typeof password !== 'string') { throw new Error('password must be a string') }
-//     if (password.length < 6) { throw new Error('password must be at least 6 characters long') }
-//   }
-// }
